@@ -34,13 +34,7 @@ dependencies...
 #### Patch Crossplane service account
 
 ```sh
-kubectl edit serviceaccount crossplane -n crossplane-system
-```
-
-```yaml
-imagePullSecrets:
-  - name: package-pull-secret
-  - name: upbound-platform-packages
+kubectl patch serviceaccount crossplane -n crossplane-system --type='json' -p='[{"op": "add", "path": "/imagePullSecrets/-", "value": {"name": "upbound-platform-packages"}}]'
 ```
 
 #### Yay it works
@@ -142,4 +136,14 @@ Let's upgrade dependencies
 
 ```sh
 kubectl apply -f post/configuration-0.6.0.yaml
+```
+
+```sh
+kubectl get configuration
+```
+
+## Cleanup
+
+```sh
+kubectl delete configuration,provider,imageconfig --all && kubectl delete secrets upbound-platform-packages upbound-lts-packages -n crossplane-system
 ```
