@@ -1,0 +1,20 @@
+apiVersion: pkg.crossplane.io/v1beta1
+kind: ImageConfig
+metadata:
+  name: upbound-lts-packages
+spec:
+  matchImages:
+    - prefix: xpkg.upbound.io/upbound/provider-aws-lts
+  registry:
+    authentication:
+      pullSecretRef:
+        name: upbound-lts-packages
+  verification:
+    provider: Cosign
+    cosign:
+      authorities:
+        - name: verify keyless signing
+          keyless:
+            identities:
+              - issuer: https://token.actions.githubusercontent.com
+                subject: https://github.com/upbound/upbound-official-build/.github/workflows/supplychain.yml@refs/heads/main

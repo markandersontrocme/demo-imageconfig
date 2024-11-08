@@ -1,0 +1,12 @@
+apiVersion: pkg.crossplane.io/v1beta1
+kind: ImageConfig
+metadata:
+  name: upbound-platform-packages
+spec:
+  matchImages:
+    - prefix: xpkg.upbound.io/upbound-platform/
+  registry:
+    authentication:
+      pullSecretRef:
+        name: upbound-platform-packages
+
