@@ -25,7 +25,7 @@ kubectl apply -f pre/configuration-0.5.0.yaml
 #### Things don't work
 
 ```sh
-kubectl get configuration
+crossplane beta trace configuration platform-composite-caas
 ```
 
 > Even though we have a `packagePullSecret` it is not being used on the
@@ -40,7 +40,7 @@ kubectl patch serviceaccount crossplane -n crossplane-system --type='json' -p='[
 #### Yay it works
 
 ```sh
-kubectl get configuration
+crossplane beta trace configuration platform-composite-caas
 ```
 
 > If we upgrade the Crossplane release we will need to re-patch the service
@@ -51,6 +51,10 @@ if we wanted to.
 
 ```sh
 kubectl apply -f pre/configuration-0.6.0.yaml
+```
+
+```sh
+crossplane beta trace configuration platform-composite-caas
 ```
 
 ```yaml
@@ -91,7 +95,7 @@ kubectl apply -f post/configuration-0.5.0.yaml
 #### Yay it works
 
 ```sh
-kubectl get configuration
+crossplane beta trace configuration platform-composite-caas
 ```
 
 ### But wait there's more
@@ -119,7 +123,7 @@ kubectl apply -f post/provider-lts.yaml
 #### Check the image verification
 
 ```sh
-kubectl get providerrevision
+crossplane beta trace provider provider-aws-lts-s3
 ```
 
 ```yaml
@@ -139,7 +143,7 @@ kubectl apply -f post/configuration-0.6.0.yaml
 ```
 
 ```sh
-kubectl get configuration
+crossplane beta trace configuration platform-composite-caas
 ```
 
 ## Cleanup
