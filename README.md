@@ -105,7 +105,7 @@ Let's do image verification
 #### Create secrets to pull other private packages
 
 ```sh
-kubectl -n crossplane-system create secret docker-registry upbound-lts-packages --docker-server=xpkg.upbound.io --docker-username=${REGISTRY_USR_LTS} --docker-password=${REGISTRY_PW_LTS}
+kubectl -n crossplane-system create secret docker-registry upbound-packages --docker-server=xpkg.upbound.io --docker-username=${REGISTRY_USR_LTS} --docker-password=${REGISTRY_PW_LTS}
 ```
 
 #### Install an ImageConfig with verification
@@ -117,18 +117,18 @@ kubectl apply -f post/imageconfig-verification.yaml
 #### Install a private provider
 
 ```sh
-kubectl apply -f post/provider-lts.yaml
+kubectl apply -f post/provider-s3.yaml
 ```
 
 #### Check the image verification
 
 ```sh
-crossplane beta trace provider provider-aws-lts-s3
+crossplane beta trace provider provider-aws-s3
 ```
 
 ```yaml
 - lastTransitionTime: "2024-11-07T04:17:52Z"
-  message: Signature verification succeeded using ImageConfig named "upbound-lts-packages"
+  message: Signature verification succeeded using ImageConfig named "upbound-packages"
   reason: SignatureVerificationSucceeded
   status: "True"
   type: Verified
@@ -149,5 +149,5 @@ crossplane beta trace configuration platform-composite-caas
 ## Cleanup
 
 ```sh
-kubectl delete configuration,provider,imageconfig --all && kubectl delete secrets upbound-platform-packages upbound-lts-packages -n crossplane-system
+kubectl delete configuration,provider,imageconfig --all && kubectl delete secrets upbound-platform-packages upbound-packages -n crossplane-system
 ```

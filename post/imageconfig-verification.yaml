@@ -1,14 +1,14 @@
 apiVersion: pkg.crossplane.io/v1beta1
 kind: ImageConfig
 metadata:
-  name: upbound-lts-packages
+  name: upbound-packages
 spec:
   matchImages:
-    - prefix: xpkg.upbound.io/upbound/provider-aws-lts
+    - prefix: xpkg.upbound.io/upbound/provider-aws
   registry:
     authentication:
       pullSecretRef:
-        name: upbound-lts-packages
+        name: upbound-packages
   verification:
     provider: Cosign
     cosign:
