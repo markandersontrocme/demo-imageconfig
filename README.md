@@ -27,7 +27,7 @@ kubectl apply -f pre/configuration-0.5.0.yaml
 #### Things don't work
 
 ```sh
-crossplane beta trace configuration platform-composite-caas
+kubectl get configuration
 ```
 
 > Even though we have a `packagePullSecret` it is not being used on the
@@ -44,7 +44,7 @@ kubectl apply -f post/imageconfig.yaml
 #### Yay it works
 
 ```sh
-crossplane beta trace configuration platform-composite-caas
+kubectl get configuration
 ```
 
 ### But wait there's more
@@ -72,11 +72,7 @@ kubectl apply -f post/provider-s3.yaml
 #### Check the image verification
 
 ```sh
-crossplane beta trace provider provider-aws-s3
-```
-
-```sh
-kubectl describe <providerRevision>
+kubectl get providerrevision -l pkg.crossplane.io/package=provider-aws-s3 -ojson | jq '.items[].status.conditions'
 ```
 
 ```yaml
@@ -96,7 +92,7 @@ kubectl apply -f post/configuration-0.6.0.yaml
 ```
 
 ```sh
-crossplane beta trace configuration platform-composite-caas
+kubectl get configuration
 ```
 
 ## Cleanup
