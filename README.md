@@ -1,14 +1,16 @@
 # Demo: Crossplane ImageConfig
 
-## Pre
+## Pre-Requisites
 
-### Connect to a control plane
-
-#### Upbound Cloud
+Create a Kubernetes cluster, e.g. with `kind`:
 
 ```sh
-up ctx kubecon-loves-xp/upbound-gcp-us-central-1/default/hacky-mchack-face
+helm repo add crossplane-stable https://charts.crossplane.io/stable
+helm repo update
+helm install crossplane --namespace crossplane-system --create-namespace crossplane-stable/crossplane --set 'args={--enable-dependency-version-upgrades,--enable-signature-verification}'
 ```
+
+## Pre
 
 ### Create secrets to pull private packages
 
@@ -31,65 +33,12 @@ crossplane beta trace configuration platform-composite-caas
 > Even though we have a `packagePullSecret` it is not being used on the
 dependencies...
 
-#### Patch Crossplane service account
-
-```sh
-kubectl patch serviceaccount crossplane -n crossplane-system --type='json' -p='[{"op": "add", "path": "/imagePullSecrets/-", "value": {"name": "upbound-platform-packages"}}]'
-```
-
-#### Yay it works
-
-```sh
-crossplane beta trace configuration platform-composite-caas
-```
-
-> If we upgrade the Crossplane release we will need to re-patch the service
-account. We can pass the secret name as a value to the Crossplane Helm chart
-if we wanted to.
-
-### Upgrade our configuration
-
-```sh
-kubectl apply -f pre/configuration-0.6.0.yaml
-```
-
-```sh
-crossplane beta trace configuration platform-composite-caas
-```
-
-```yaml
-message: 'cannot resolve package dependencies: incompatible dependencies: existing
-package xpkg.upbound.io/upbound-platform/platform-composite-ubc-gke@v2.5.0 is
-incompatible with constraint v2.6.0'
-```
-
-> We would need to manually edit the configuration to get the new version, but
-enough of this, let's move to how things are now.
-
 ## Post
-
-### Connect to a control plane
-
-```sh
-up ctx kubecon-loves-xp/upbound-gcp-us-central-1/default/fancy-pants
-```
-
-### Create secrets to pull private packages
-
-```sh
-kubectl -n crossplane-system create secret docker-registry upbound-platform-packages --docker-server=xpkg.upbound.io --docker-username=${REGISTRY_USR_PLAT} --docker-password=${REGISTRY_PW_PLAT}
-```
 
 ### Install an ImageConfig
 
 ```sh
 kubectl apply -f post/imageconfig.yaml
-```
-
-### Install private package with private dependencies
-
-```sh
-kubectl apply -f post/configuration-0.5.0.yaml
 ```
 
 #### Yay it works
@@ -124,6 +73,10 @@ kubectl apply -f post/provider-s3.yaml
 
 ```sh
 crossplane beta trace provider provider-aws-s3
+```
+
+```sh
+kubectl describe <providerRevision>
 ```
 
 ```yaml

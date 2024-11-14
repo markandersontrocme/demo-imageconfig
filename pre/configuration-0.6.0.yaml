@@ -1,8 +1,0 @@
-apiVersion: pkg.crossplane.io/v1
-kind: Configuration
-metadata:
-  name: platform-composite-caas
-spec:
-  package: xpkg.upbound.io/upbound-platform/platform-composite-caas:v0.6.0
-  packagePullSecrets: # This will be used to pull this package but not private packages that are dependencies
-    - name: upbound-platform-packages
